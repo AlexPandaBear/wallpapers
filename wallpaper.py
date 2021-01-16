@@ -18,12 +18,12 @@ from getpass import getuser
 
 background_image = "wallpaper.jpg"  #The name of the file (with path if necessary)
 
-note_image = "notes/pin.png"        #Choose the note you want (notes folder)
+note_image = "notes/clip.png"        #Choose the note you want (notes folder)
 note_size = 0.15                    #Choose the size of the note (relative to the screen)
 note_location = (0.83, 0.08)        #Choose the location of the top left corner of the note
 
 note = "note.txt"                   #Edit this file to write your note
-font = "fonts/pat.ttf"            #Choose the font you want (fonts folder)
+font = "fonts/mirage.otf"            #Choose the font you want (fonts folder)
 font_size = 40                      #Choose the font size (in pixels)
 text_location = (0.1, 0.2)          #Choose the location of the beginning of the first line (relative to the note)
 color = (0, 0, 0)                   #Choose the color of the text (RGB)
