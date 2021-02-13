@@ -1,2 +1,2 @@
 #!/bin/bash
-python wallpaper.py
+python app.py
