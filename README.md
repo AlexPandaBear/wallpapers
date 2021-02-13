@@ -3,7 +3,7 @@
 This small project is a Python script that adds a "sticky" note to your wallpaper.
 
 <p align="center">
-	<img src=logo.png />
+	<img src=demo.png />
 </p>
 
 ## Requirements
