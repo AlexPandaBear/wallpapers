@@ -15,7 +15,7 @@ from getpass import getuser
 
 class Wallpaper:
 	def __init__(self):
-		self.background_image = "wallpaper.jpg" #The name of the file (with path if necessary)
+		self.background_image = ""			 	#The name of the file (with path if necessary)
 
 		self.note_image = "notes/clip.png"  	#The note you want (notes folder)
 		self.note_size = 0.15               	#The size of the note (relative to the screen)
@@ -23,7 +23,9 @@ class Wallpaper:
 
 		self.text_file = "note.txt"             #The file where the note is written
 		self.font_file = "fonts/mirage.otf"     #The font you want (fonts folder)
-		self.font_size = 35                     #The font size (in pixels)
+		self.font_size = 35 		            #The font size (in pixels)    
+		self.bold = False
+		self.italic = False
 		self.text_location = (0.1, 0.2)         #The location of the beginning of the first line (relative to the note)
 		self.text_color = (0, 0, 0)     		#The color of the text (RGB)
 	
@@ -48,6 +50,10 @@ class Wallpaper:
 
 	def set_font_size(self, size):
 		self.font_size = size
+
+	def set_font_options(self, options):
+		self.bold = bool(options[0])
+		self.italic = bool(options[1])
 
 	def set_text_location(self, location):
 		self.text_location = location

@@ -4,10 +4,10 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from PIL import Image, ImageTk
-import os
+import os, shutil
 
 from wallpaper import Wallpaper
-from windows import EditionWindow
+from tools import EditionWindow, Checkbar
 
 
 
@@ -16,23 +16,24 @@ class App(tk.Tk):
 		super().__init__()
 		self.title("Wallpaper")
 		self.geometry("1080x580")
-		self.configure(bg='white')
 		self.style = ttk.Style(self)
 		self.style.theme_use('clam')
 
 		self.big_pad = 12
 		self.pad = 5
+		self.bg_color = "SlateGray1"
+		self.configure(bg=self.bg_color)
 
 
 		self.wallpaper = Wallpaper()
 
 
-		main_frame = ttk.Frame(self)
+		main_frame = tk.Frame(self, bg=self.bg_color)
 
-
+		#Wallpaper preview
 		left_side = ttk.Frame(main_frame)
 
-		raw_img = Image.open("demo.jpg")
+		raw_img = Image.open("demo.png")
 		w = 800
 		h = int(raw_img.size[1] * w/raw_img.size[0])
 		img = ImageTk.PhotoImage(raw_img.resize((w,h)))
@@ -42,30 +43,37 @@ class App(tk.Tk):
 
 		left_side.grid(row=0, column=0, padx=self.big_pad, pady=self.big_pad)
 
-
-		right_side = ttk.LabelFrame(main_frame, text="Configuration")
+		#Configuration
+		right_side = tk.LabelFrame(main_frame, text="Configuration", bg=self.bg_color)
 
 		ttk.Button(right_side, text="Choose wallpaper", command=self.choose_wallpaper).pack(padx=self.pad, pady=self.pad)
 
-		note_frame = ttk.LabelFrame(right_side, text="Note")
-		frame = ttk.Frame(note_frame)
-		ttk.Label(frame, text="Note type: ").grid(row=0, column=0, padx=self.pad, pady=self.pad)
+		#Note
+		note_frame = tk.LabelFrame(right_side, text="Note", bg=self.bg_color)
+		
+		frame = tk.Frame(note_frame, bg=self.bg_color)
+		tk.Label(frame, text="Note type: ", bg=self.bg_color).grid(row=0, column=0, padx=self.pad, pady=self.pad)
 		ttk.OptionMenu(frame, tk.StringVar(), *self.get_options("./notes"), command=self.choose_note).grid(row=0, column=1, padx=self.pad, pady=self.pad)
 		frame.pack()
 		ttk.Button(note_frame, text="Edit the note", command=self.edit_note).pack(padx=self.pad, pady=self.pad)
+		
 		note_frame.pack(fill="both", expand="yes", padx=self.pad, pady=self.pad)
 
-		font_frame = ttk.LabelFrame(right_side, text="Text", borderwidth=2, relief=tk.GROOVE)
+		#Text
+		font_frame = tk.LabelFrame(right_side, text="Text", borderwidth=2, relief=tk.GROOVE, bg=self.bg_color)
 
-		frame = ttk.Frame(font_frame)
-		ttk.Label(frame, text="Font: ", anchor='e').grid(row=0, column=0, padx=self.pad, pady=self.pad)
+		frame = tk.Frame(font_frame, bg=self.bg_color)
+		tk.Label(frame, text="Font: ", anchor='e', bg=self.bg_color).grid(row=0, column=0, padx=self.pad, pady=self.pad)
 		ttk.OptionMenu(frame, tk.StringVar(), *self.get_options("./fonts"), command=self.choose_font).grid(row=0, column=1, padx=self.pad, pady=self.pad)
 		frame.pack()
 
-		frame = ttk.Frame(font_frame)
-		ttk.Label(frame, text="Font size: ", anchor='e').grid(row=1, column=0, padx=self.pad, pady=self.pad)
+		frame = tk.Frame(font_frame, bg=self.bg_color)
+		tk.Label(frame, text="Font size: ", anchor='e', bg=self.bg_color).grid(row=1, column=0, padx=self.pad, pady=self.pad)
 		ttk.OptionMenu(frame, tk.IntVar(), *range(10,61,2), command=self.choose_font_size).grid(row=1, column=1, padx=self.pad, pady=self.pad)
 		frame.pack()
+
+		self.font_options = Checkbar(font_frame, ['Bold','Italic'], self.choose_font_options, self.bg_color)
+		self.font_options.pack()
 
 		font_frame.pack(fill="both", expand="yes", padx=self.pad, pady=self.pad)
 
@@ -109,6 +117,11 @@ class App(tk.Tk):
 		self.wallpaper.generate()
 		self.update_preview()
 
+	def choose_font_options(self):
+		self.wallpaper.set_font_options(self.font_options.state())
+		self.wallpaper.generate()
+		self.update_preview()
+
 	def update_preview(self):
 		raw_img = Image.open("tmp.png")
 		w = 800
@@ -119,7 +132,9 @@ class App(tk.Tk):
 
 	def save_and_quit(self):
 		if os.path.exists("tmp.png"):
-			os.remove("tmp.png")
+			destination = filedialog.asksaveasfilename(title="Save as", initialdir="~", defaultextension=".png")
+			if destination is "": return
+			shutil.move("{}/tmp.png".format(os.getcwd()), destination)
 		self.destroy()
 
 
