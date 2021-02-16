@@ -10,10 +10,7 @@ This small project is a Python script that adds a "sticky" note to your wallpape
 - Python 3+
 - The Pillow and Getpass libraries
 
-## How to install
-Nothing to do !
-
 ## How to use
-- Open the wallpaper.py script.
-- Customize the parameters.
-- Run the script.
+```console
+user@linux:~/<path to directory>$ python app.py
+```
