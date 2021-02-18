@@ -11,7 +11,7 @@ class PreviewFrame(tk.Frame):
 
 		raw_img = Image.open(self.img_name)
 		img = ImageTk.PhotoImage(raw_img.resize((self.width, self.height)))
-		self.imglabel = tk.Label(parent, image=img)
+		self.imglabel = tk.Label(self, image=img)
 		self.imglabel.image = img
 		self.imglabel.pack()
 

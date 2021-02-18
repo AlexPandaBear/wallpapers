@@ -11,7 +11,7 @@ class App(tk.Tk):
 	def __init__(self):
 		super().__init__()
 		self.title("Wallpaper")
-		self.geometry("850x850")
+		self.geometry("1100x550")
 		self.style = ttk.Style(self)
 		self.style.theme_use('clam')
 
@@ -29,9 +29,9 @@ class App(tk.Tk):
 
 		#Configuration
 		right_side = ConfigFrame(parent=main_frame, preview=left_side, bg_color=bg_color, pad=pad)
-		right_side.pack(side=tk.RIGHT, padx=big_pad, pady=big_pad)
+		right_side.pack(side=tk.RIGHT, padx=big_pad, pady=big_pad, expand="yes", fill="x")
 
-		main_frame.pack()
+		main_frame.pack(expand="yes", fill="both")
 
 		ttk.Button(self, text="Save and Quit", command=self.save_and_quit).pack(padx=big_pad, pady=big_pad)
 

@@ -40,3 +40,16 @@ class Checkbar(tk.Frame):
 
 	def state(self):
 		return [var.get() for var in self.vars]
+
+
+class EntryFrame(tk.Frame):
+	def __init__(self, parent=None, bg_color="white", pad=0):
+		super().__init__(master=parent, bg=bg_color)
+		
+		frame = tk.Frame(note_frame, bg=bg_color)
+		self.note_size = 15
+		tk.Label(frame, text="Note size:", bg=bg_color).grid(row=0, column=0, padx=pad, pady=pad)
+		self.e_note_size = ttk.Entry(frame, width=4)
+		self.e_note_size.insert(0, self.note_size)
+		self.e_note_size.grid(row=0, column=1, padx=pad, pady=pad)
+		frame.pack()

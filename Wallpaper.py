@@ -14,11 +14,11 @@ from PIL import ImageDraw
 
 class Wallpaper:
 	def __init__(self):
-		self.background_image = ""			 	#The name of the file (with path if necessary)
+		self.background_image = "demo.png"	 	#The name of the file (with path if necessary)
 
 		self.note_image = "notes/clip.png"  	#The note you want (notes folder)
 		self.note_size = 0.15               	#The size of the note (relative to the screen)
-		self.note_location = (0.83, 0.08)   	#The location of the top left corner of the note
+		self.note_location = [0.97, 0.08]   	#The location of the top left corner of the note
 
 		self.text_file = "note.txt"             #The file where the note is written
 		self.font_file = "fonts/mirage.otf"     #The font you want (fonts folder)
@@ -38,8 +38,9 @@ class Wallpaper:
 	def set_note_size(self, size):
 		self.note_size = size
 
-	def get_note_location(self, location):
-		self.note_location = location
+	def set_note_location(self, location):
+		self.note_location[0] = float(location[0])/100
+		self.note_location[1] = float(location[1])/100
 
 	def set_text(self, text):
 		self.text_file = text
@@ -85,8 +86,8 @@ class Wallpaper:
 		        line = file.readline()
 
 
-		note_x0 = int(self.note_location[0] * background.size[0])
-		note_y0 = int(self.note_location[1] * background.size[1])
+		note_x0 = int(self.note_location[0] * (background.size[0]-note_width))
+		note_y0 = int(self.note_location[1] * (background.size[1]-note_height))
 
 		background.paste(img, (note_x0, note_y0), img)
 		background.save("tmp.png", "png")

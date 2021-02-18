@@ -14,21 +14,41 @@ class ConfigFrame(tk.LabelFrame):
 		self.preview = preview
 		
 		#Wallpaper
-		ttk.Button(text="Choose wallpaper", command=self.choose_wallpaper).pack(padx=pad, pady=pad)
+		ttk.Button(self, text="Choose wallpaper", command=self.choose_wallpaper).pack(padx=pad, pady=pad)
 
 		#Note
-		note_frame = tk.LabelFrame(text="Note", bg=bg_color)
+		note_frame = tk.LabelFrame(self, text="Note", bg=bg_color)
 		
 		frame = tk.Frame(note_frame, bg=bg_color)
 		tk.Label(frame, text="Note type: ", bg=bg_color).grid(row=0, column=0, padx=pad, pady=pad)
 		ttk.OptionMenu(frame, tk.StringVar(), *self.get_options("./notes"), command=self.choose_note).grid(row=0, column=1, padx=pad, pady=pad)
 		frame.pack()
+
+		frame = tk.Frame(note_frame, bg=bg_color)
+		self.note_size = 15
+		tk.Label(frame, text="Note size:", bg=bg_color).grid(row=0, column=0, padx=pad, pady=pad)
+		self.e_note_size = ttk.Entry(frame, width=4)
+		self.e_note_size.insert(0, self.note_size)
+		self.e_note_size.grid(row=0, column=1, padx=pad, pady=pad)
+		frame.pack()
+
+		frame = tk.Frame(note_frame, bg=bg_color)
+		self.note_xy = [97, 8]
+		tk.Label(frame, text="Note location:", bg=bg_color).grid(row=0, column=0, padx=pad, pady=pad)
+		self.note_x = ttk.Entry(frame, width=4, validatecommand=self.register(self.validate_note_x), validate="focusout")
+		self.note_x.insert(0, self.note_xy[0])
+		self.note_x.grid(row=0, column=1, padx=pad, pady=pad)
+		self.note_y = ttk.Entry(frame, width=4, validatecommand=self.register(self.validate_note_y), validate="focusout")
+		self.note_y.insert(0, self.note_xy[1])
+		self.note_y.grid(row=0, column=2, padx=pad, pady=pad)
+		frame.pack()
+
 		ttk.Button(note_frame, text="Edit the note", command=self.edit_note).pack(padx=pad, pady=pad)
-		
+
 		note_frame.pack(fill="both", expand="yes", padx=pad, pady=pad)
 
 		#Text
-		font_frame = tk.LabelFrame(text="Text", borderwidth=2, relief=tk.GROOVE, bg=bg_color)
+		font_frame = tk.LabelFrame(self, text="Text", borderwidth=2, relief=tk.GROOVE, bg=bg_color)
 
 		frame = tk.Frame(font_frame, bg=bg_color)
 		tk.Label(frame, text="Font: ", anchor='e', bg=bg_color).grid(row=0, column=0, padx=pad, pady=pad)
@@ -73,6 +93,31 @@ class ConfigFrame(tk.LabelFrame):
 
 	def choose_note(self, note):
 		self.wallpaper.set_note("notes/{}{}".format(note[0], note[1]))
+		self.wallpaper.generate()
+		self.preview.update("tmp.png")
+
+	def validate_note_x(self):
+		x = int(self.note_x.get())
+		
+		if 0 <= x <= 100:
+			self.note_xy[0] = x
+			self.update_note_xy()
+			return True
+		
+		return False
+
+	def validate_note_y(self):
+		y = int(self.note_y.get())
+		
+		if 0 <= y <= 100:
+			self.note_xy[1] = y
+			self.update_note_xy()
+			return True
+		
+		return False
+
+	def update_note_xy(self):
+		self.wallpaper.set_note_location(self.note_xy)
 		self.wallpaper.generate()
 		self.preview.update("tmp.png")
 
