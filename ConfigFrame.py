@@ -46,12 +46,22 @@ class ConfigFrame(tk.LabelFrame):
 		font_frame.pack(fill="both", expand="yes", padx=pad, pady=pad)
 	
 	def choose_wallpaper(self):
-		wallpaper_file = filedialog.askopenfilename(initialdir = "~",
+		with open(".paths", 'r') as f:
+			idir = f.readlines()[0]
+		
+		wallpaper_file = filedialog.askopenfilename(initialdir = idir.strip(),
 													title = "Select a Wallpaper",
-													filetypes = (("Image files", "*.png*"), ("all files", "*.*"))) 
+													filetypes = (("Image files", ".jpg .png"), ("all files", "*.*")))
+		
 		self.wallpaper.set_background(wallpaper_file)
 		self.wallpaper.generate()
 		self.preview.update("tmp.png")
+
+		with open(".paths", "r") as f:
+			lines = f.readlines()
+		lines[0] = os.path.split(wallpaper_file)[0] + "\n"
+		with open(".paths", "w") as f:
+			f.writelines(lines)
 
 	def edit_note(self):
 		edition_window = EditionWindow("note.txt")

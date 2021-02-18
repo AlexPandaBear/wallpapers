@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 import os, shutil
-from PreviewFrame import  PreviewFrame
+from PreviewFrame import PreviewFrame
 from ConfigFrame import ConfigFrame
 
 
@@ -37,9 +37,18 @@ class App(tk.Tk):
 
 	def save_and_quit(self):
 		if os.path.exists("tmp.png"):
-			destination = filedialog.asksaveasfilename(title="Save as", initialdir="~", defaultextension=".png")
+			with open(".paths", 'r') as f:
+				idir = f.readlines()[1]
+
+			destination = filedialog.asksaveasfilename(title="Save as", initialdir=idir.strip(), defaultextension=".png")
 			if destination is "": return
 			shutil.move("{}/tmp.png".format(os.getcwd()), destination)
+			
+			with open(".paths", "r") as f:
+				lines = f.readlines()
+			lines[1] = os.path.split(destination)[0] + "\n"
+			with open(".paths", "w") as f:
+				f.writelines(lines)
 		self.destroy()
 
 
