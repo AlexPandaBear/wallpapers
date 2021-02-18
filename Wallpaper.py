@@ -10,7 +10,6 @@ Created on Fri Jan 15 21:58:58 2021
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
-from getpass import getuser
 
 
 class Wallpaper:

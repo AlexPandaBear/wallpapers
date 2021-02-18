@@ -1,4 +1,9 @@
 import tkinter as tk
+from tkinter import ttk
+from tkinter import filedialog
+import os
+
+
 
 class EditionWindow():
 	def __init__(self, file):
@@ -21,6 +26,7 @@ class EditionWindow():
 			f.write(text.get(0.0, 'end'))
 
 		self.root.destroy()
+
 
 class Checkbar(tk.Frame):
 	def __init__(self, parent=None, picks=[], command=None, bg="white", side=tk.LEFT, anchor='w'):
