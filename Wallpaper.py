@@ -36,7 +36,7 @@ class Wallpaper:
 		self.note_image = img
 
 	def set_note_size(self, size):
-		self.note_size = size
+		self.note_size = float(size)/100
 
 	def set_note_location(self, location):
 		self.note_location[0] = float(location[0])/100

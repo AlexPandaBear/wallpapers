@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 import os
+from functools import partial
 
 
 
@@ -28,13 +29,13 @@ class EditionWindow():
 		self.root.destroy()
 
 
-class Checkbar(tk.Frame):
-	def __init__(self, parent=None, picks=[], command=None, bg="white", side=tk.LEFT, anchor='w'):
-		tk.Frame.__init__(self, parent)
+class Checkbar(ttk.Frame):
+	def __init__(self, master, picks=[], command=None, side=tk.LEFT, anchor='w'):
+		super().__init__(master)
 		self.vars = []
 		for pick in picks:
 			var = tk.IntVar()
-			chk = tk.Checkbutton(self, text=pick, variable=var, command=command, bg=bg)
+			chk = ttk.Checkbutton(self, text=pick, variable=var, command=command)
 			chk.pack(side=side, anchor=anchor, expand="yes")
 			self.vars.append(var)
 
@@ -42,14 +43,20 @@ class Checkbar(tk.Frame):
 		return [var.get() for var in self.vars]
 
 
-class EntryFrame(tk.Frame):
-	def __init__(self, parent=None, bg_color="white", pad=0):
-		super().__init__(master=parent, bg=bg_color)
-		
-		frame = tk.Frame(note_frame, bg=bg_color)
-		self.note_size = 15
-		tk.Label(frame, text="Note size:", bg=bg_color).grid(row=0, column=0, padx=pad, pady=pad)
-		self.e_note_size = ttk.Entry(frame, width=4)
-		self.e_note_size.insert(0, self.note_size)
-		self.e_note_size.grid(row=0, column=1, padx=pad, pady=pad)
-		frame.pack()
+class EntryFrame(ttk.Frame):
+	def __init__(self, master, text, default_values=[], validate_commands=[], validate=None, width=10, pad=0):
+		super().__init__(master)
+
+		ttk.Label(self, text=text).grid(row=0, column=0, padx=pad, pady=pad)
+		self.vars = []
+
+		for i in range(len(default_values)):
+			self.vars.append(tk.StringVar(value=default_values[i]))
+			ttk.Entry(self, textvariable=self.vars[i], width=width, validatecommand=partial(validate_commands[i], self.vars[i]), validate=validate).grid(row=0, column=i+1, padx=pad, pady=pad)
+
+
+class OptionMenuFrame(ttk.Frame):
+	def __init__(self, master, text, options, command=None, pad=0):
+		super().__init__(master)
+		ttk.Label(self, text=text).grid(row=0, column=0, padx=pad, pady=pad)
+		ttk.OptionMenu(self, tk.StringVar(), *options, command=command).grid(row=0, column=1, padx=pad, pady=pad)

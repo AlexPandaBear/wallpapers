@@ -2,9 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 
-class PreviewFrame(tk.Frame):
-	def __init__(self, parent=None, img_name=None, w=800, h=450):
-		super().__init__(master=parent)
+class PreviewFrame(ttk.Frame):
+	def __init__(self, master, img_name=None, w=800, h=450):
+		super().__init__(master)
 		self.img_name = img_name
 		self.width = w
 		self.height = h

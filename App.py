@@ -9,29 +9,28 @@ from ConfigFrame import ConfigFrame
 
 class App(tk.Tk):
 	def __init__(self):
-		super().__init__()
+		super().__init__(className="Wallpaper")
 		self.title("Wallpaper")
+		self.tk.call("wm", "iconphoto", self._w, tk.PhotoImage(file="logo.png"))
 		self.geometry("1100x550")
 		self.style = ttk.Style(self)
 		self.style.theme_use('clam')
+		self.style.configure("TFrame", background="white")
 
 		pad = 5
 		big_pad = 12
-		bg_color = "SlateGray1"
 		
-		self.configure(bg=bg_color)
-
-		main_frame = tk.Frame(self, bg=bg_color)
+		self.main_frame = ttk.Frame(self)
 
 		#Wallpaper preview
-		left_side = PreviewFrame(parent=main_frame, img_name="demo.png")
-		left_side.pack(side=tk.LEFT, padx=big_pad, pady=big_pad)
+		self.left_side = PreviewFrame(self.main_frame, img_name="demo.png")
+		self.left_side.pack(side=tk.LEFT, padx=big_pad, pady=big_pad)
 
 		#Configuration
-		right_side = ConfigFrame(parent=main_frame, preview=left_side, bg_color=bg_color, pad=pad)
-		right_side.pack(side=tk.RIGHT, padx=big_pad, pady=big_pad, expand="yes", fill="x")
+		self.right_side = ConfigFrame(self.main_frame, self.left_side, pad=pad)
+		self.right_side.pack(side=tk.RIGHT, padx=big_pad, pady=big_pad, expand="yes", fill="x")
 
-		main_frame.pack(expand="yes", fill="both")
+		self.main_frame.pack(expand="yes", fill="both")
 
 		ttk.Button(self, text="Save and Quit", command=self.save_and_quit).pack(padx=big_pad, pady=big_pad)
 
